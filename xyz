@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #feffff;
+    margin: 0;
+}
+.calculator {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #c5f1f3;
+    width: 200px;
+}
+#display {
+    width: 100%;
+    height: 50px;
+    border: none;
+    text-align: right;
+    padding: 10px;
+    font-size: 1.5em;
+    box-sizing: border-box;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+button {
+    height: 50px;
+    border: 1px solid #ddd;
+    background-color: #c5f1f3;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #e0e0e0;
+}
+.c{
+    grid-column: span 4;
+    background-color: rgb(188, 238, 219);
+}
+</style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button onclick="appendToDisplay('+')">+</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('*')">*</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="appendToDisplay('-')">-</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculateResult()">=</button>
+            <button onclick="clearDisplay() " class="c">C</button>
+        </div>
+    </div>
+    <script >
+       let currentInput = '';
+let operator = '';
+let previousInput = '';
+function appendToDisplay(value) {
+    const display = document.getElementById('display');
+    display.value += value;
+    currentInput += value;
+}
+function clearDisplay() {
+    document.getElementById('display').value = '';
+    currentInput = '';
+    operator = '';
+    previousInput = '';
+}
+function calculateResult() {
+    const display = document.getElementById('display');
+    if (currentInput === '' || previousInput === '' || operator === '') {
+        return;
+    }
+    
+    let result;
+    const num1 = parseFloat(previousInput);
+    const num2 = parseFloat(currentInput);
+
+    if (operator === '+') {
+        result = num1 + num2;
+    } else if (operator === '-') {
+        result = num1 - num2;
+    } else if (operator === '*') {
+        result = num1 * num2;
+    } else if (operator === '/') {
+        if (num2 === 0) {
+            display.value = 'Error';
+            return;
+        }
+        result = num1 / num2;
+    }
+    display.value = result;
+    currentInput = result.toString();
+    operator = '';
+    previousInput = '';
+}
+function setOperator(op) {
+    const display = document.getElementById('display');
+    if (previousInput === '') {
+        previousInput = currentInput;
+    } else if (currentInput !== '') {
+        calculateResult();
+    }
+    operator = op;
+    currentInput = '';
+    display.value = previousInput + ' ' + operator + ' ';
+}
+    </script>
+</body>
+</html>
